@@ -4,7 +4,7 @@
 schema:
   schema_id: combo_pinyin_lrow
   name: 宮保拼音声母优化
-  author:
+  author: zhanghaozhecn
   description: |
     修改自佛振“宫保拼音”
     https://github.com/rime/home/wiki/ComboPinyinKBCon
@@ -24,7 +24,7 @@ engine:
   processors:
     - ascii_composer
     - recognizer
-    - chord_composer  # 實現並擊按鍵處理
+    - chord_composer
     - key_binder
     - speller
     - punctuator
@@ -55,11 +55,12 @@ speller:
 chord_composer:
   alphabet: 'gtbfrvdecswxaqzhynjum ki,lo.p;'
   algebra:
-    - 'xlit|qazwsxedcrfvtgb yhnujmik,ol.p;|XrXXCXXSXXZXXhXaXRXuivIN,oe.XU|'
+    - xlit|qazwsxedcrfvtgb yhnujmik,ol.p;|XrXXCXXSXXZXXhXaXXXuivIN,oeEXU|
     # 特殊
-    - 'xform/^[a]$/ /'
+    - xform/^a$/ /
     - xform/^ae$/a/
-    - xform/^R$/er/
+    - xform/^,E$/er/
+    - xform/^E$/./
     # 声母
     - xform/^SC/b/
     - xform/^hSC/p/
@@ -81,24 +82,34 @@ chord_composer:
     - xform/^ch([iv])/q$1/
     - xform/^sh([iv])/x$1/
     # 韵母
-    - xform/eU$/o/
-    - xform/aU$/ao/
-    - xform/U$/ou/
-    - xform/(ua?)Io$/$1Ne/
-    - xform/aI$/ai/
-    - xform/I$/ei/
+    # 韵腹为o/e
     - xform/^([bpmf])e$/$1o/
     - xform/^([dtnlgkh])e$/$1uo/
     - xform/^([zcsr])ie$/$1uo/
+    - xform/vE$/ve/
+    # 韵尾为u
+    - xform/aU$/ao/
+    - xform/U$/ou/
+    # 韵尾为i
+    - xform/aI$/ai/
+    - xform/I$/ei/
+    # 韵尾为ng
+    - xform/(ua?)Io$/$1Ne/
+    - xform/v,E$/vng/
     - xform/([aiuv])Ne$/$1ng/
     - xform/Ne$/eng/
     - xform/^ung$/weng/
     - xform/ung$/ong/
     - xform/vng$/iong/
+    # 韵尾为n
+    - xform/va,$/van/
+    - xform/v,$/vn/
+    - xform/aIo$/uan/
+    - xform/Io$/un/
     - xform/([aiuv])N$/$1n/
     - xform/N$/en/
     - xform/^un$/wen/
-    # 漢語拼音方案的拼寫規則
+    # 汉语拼音方案的拼写规则
     - xform/^i(ng?)$/yi$1/
     - xform/^i$/yi/
     - xform/^i/y/
@@ -106,7 +117,6 @@ chord_composer:
     - xform/^u/w/
     - xform/^v/yu/
     - xform/^([jqx])v/$1u/
-    # 拼寫規則
     - xform/iou$/iu/
     - xform/uei$/ui/
     # 聲母獨用時補足隠含的韻母
