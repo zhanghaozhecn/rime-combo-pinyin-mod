@@ -1,0 +1,174 @@
+# Rime schema
+# encoding: utf-8
+
+schema:
+  schema_id: combo_pinyin_stroke
+  name: 宮保拼音笔画
+  version:
+  author: zhanghaozhecn
+  description: |
+    修改自佛振“宫保拼音”
+    https://github.com/rime/home/wiki/ComboPinyin
+
+switches:
+  - name: ascii_mode
+    reset: 0
+    states: [ 中文, 西文 ]
+  - name: full_shape
+    states: [ 半角, 全角 ]
+  - name: simplification
+    states: [ 漢字, 汉字 ]
+  - name: ascii_punct
+    states: [ 。，, ．， ]
+
+engine:
+  processors:
+    - ascii_composer
+    - recognizer
+    - chord_composer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - navigator
+    - express_editor
+  segmentors:
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - punct_segmentor
+    - fallback_segmentor
+  translators:
+    - punct_translator
+    - script_translator
+  filters:
+    - simplifier
+    - uniquifier
+
+editor:
+  bindings:
+    BackSpace: back_syllable
+
+speller:
+  alphabet: zyxwvutsrqponmlkjihgfedcbaHSPDZ
+  delimiter: " "
+  algebra:
+    # 辅助码可以为0~4码
+    - derive/(:).*$/$1/
+    - derive/(:.).*$/$1/
+    - derive/(:..).*$/$1/
+    - derive/(:...).*$/$1/
+    # 用大写字母表示词库里的笔画，避免和下一个字的声母混淆
+    - xform/(:.*)h/$1H/
+    - xform/(:.*)h/$1H/
+    - xform/(:.*)h/$1H/
+    - xform/(:.*)h/$1H/
+    - xform/(:.*)s/$1S/
+    - xform/(:.*)s/$1S/
+    - xform/(:.*)s/$1S/
+    - xform/(:.*)s/$1S/
+    - xform/(:.*)p/$1P/
+    - xform/(:.*)p/$1P/
+    - xform/(:.*)p/$1P/
+    - xform/(:.*)p/$1P/
+    - xform/(:.*)n/$1D/
+    - xform/(:.*)n/$1D/
+    - xform/(:.*)n/$1D/
+    - xform/(:.*)n/$1D/
+    - xform/(:.*)z/$1Z/
+    - xform/(:.*)z/$1Z/
+    - xform/(:.*)z/$1Z/
+    - xform/(:.*)z/$1Z/
+    - xform/://
+
+chord_composer:
+  alphabet: 'frvdecswxjum ki,lo.;gtbaqzhynp/'
+  algebra:
+    - xlit|qazwsxedcrfvtgb yhnujmik,ol.p;/|3X4cszlhfdgb215a760uivIN,oeE8U9|
+    # 特殊
+    - xform/^a$/ /
+    - xform/^,E$/er/
+    - xform/^ae$/a/
+    - xform/^E$/./
+    # 声母
+    - xform/^bz/p/
+    - xform/^dc/t/
+    - xform/^gs/k/
+    - xform/^bf/m/
+    - xform/^dl/n/
+    - xform/^gh/r/
+    - xform/^fz/zh/
+    - xform/^lc/ch/
+    - xform/^hs/sh/
+    - xform/^g([iv])/j$1/
+    - xform/^k([iv])/q$1/
+    - xform/^h([iv])/x$1/
+    # 韵母
+    # 韵腹为o/e
+    - xform/^([bpmf])e$/$1o/
+    - xform/^([dtnlgkh])e$/$1uo/
+    - xform/^([zcsr]h?)ie$/$1uo/
+    - xform/vE$/ve/
+    # 韵尾为u
+    - xform/aU$/ao/
+    - xform/U$/ou/
+    # 韵尾为i
+    - xform/aI$/ai/
+    - xform/I$/ei/
+    # 韵尾为ng
+    - xform/(ua?)Io$/$1Ne/
+    - xform/v,E$/vng/
+    - xform/([aiuv])Ne$/$1ng/
+    - xform/Ne$/eng/
+    - xform/^ung$/weng/
+    - xform/ung$/ong/
+    - xform/vng$/iong/
+    # 韵尾为n
+    - xform/va,$/van/
+    - xform/v,$/vn/
+    - xform/aIo$/uan/
+    - xform/Io$/un/
+    - xform/([aiuv])N$/$1n/
+    - xform/N$/en/
+    - xform/^un$/wen/
+    # 汉语拼音方案的拼写规则
+    - xform/^i(ng?)$/yi$1/
+    - xform/^i$/yi/
+    - xform/^i/y/
+    - xform/^u$/wu/
+    - xform/^u/w/
+    - xform/^v/yu/
+    - xform/^([jqx])v/$1u/
+    - xform/iou$/iu/
+    - xform/uei$/ui/
+    # 聲母獨用時補足隠含的韻母
+    - xform/^([bpf])$/$1u/
+    - xform/^([mdtnlgkh])$/$1e/
+    - xform/^([zcsr]h?)$/$1i/
+    # 笔画辅助码
+    - xform/^8$/;/
+    - xform|^9$|/|
+    - xlit/1234567890/HSPDZHSPDZ/
+  # 並擊過程中套用的式樣
+  prompt_format:
+    # 加方括弧
+    - 'xform/^(.*)$/[$1]/'
+
+translator:
+  dictionary: shuang_fu
+
+punctuator:
+  import_preset: my_symbols
+
+key_binder:
+  import_preset: default
+
+recognizer: {}
+
+# 用大寫鎖定鍵切換中西文
+ascii_composer:
+  good_old_caps_lock: false
+  switch_key:
+    Shift_L: noop
+    Shift_R: noop
+    Caps_Lock: clear
