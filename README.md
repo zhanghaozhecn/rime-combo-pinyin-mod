@@ -1,8 +1,10 @@
 # Combo_Pinyin_Modification
-Modification on Combo_Pinyin, based on keyboard with 2 space bars. Focus on using home row keys.
-Original design by Chen Gong: https://github.com/rime/home/wiki/ComboPinyin
-To use this input method, a programable keyboard with 2 space bars are suggested.
-In the folder, combo_pinyin_lrow decreases left region keys and combo_pinyin_rrow decreases right region keys by using left spacebar as a input key.
+本项目包含了3个宫保拼音的修改方案。原版地址：https://github.com/rime/home/wiki/ComboPinyin
+方案1和方案2需要有两个空格键的键盘，利用左大拇指减少手的上下移动。方案3加入了笔画辅助码，使选字更容易。
 
-lrow plan inputs initials with only 5 keys, asdf and left space bar. Left space needs to be assigned g key.
-rrow plan inputs vowels mainly by the home row except I (-i) and o (only io and o). Left space needs to be assigned u key.
+方案1:声母优化 combo_pinyin_lrow
+左空格设为h键
+
+方案2:韵母优化
+左空格设为u键
+
